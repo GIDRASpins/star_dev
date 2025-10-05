@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMPAKTOR — Наукові прогнози для Землі</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
+    </head>
+<body class="bg-gradient-to-b min-h-screen text-slate-900">
+
+    <nav class="flex justify-center max-w-6xl mx-auto px-6 pt-4 main-tab-stack-mobile">
+        <button id="main-tab-meteorites"
+            class="main-tab-button rounded-t-lg font-bold transition main-tab-active">
+            Загальні відомості метеоритів
+        </button>
+        <button id="main-tab-impaktor"
+            class="main-tab-button rounded-t-lg font-bold transition main-tab-inactive">
+            IMPAKTOR
+        </button>
+    </nav>
+    <header class="max-w-6xl mx-auto px-6 py-8 flex items-start justify-between gap-6 border-t-4 border-sky-800">
+        <div id="header-text-container">
+            </div>
+        <div id="view-switcher-container" class="flex items-center gap-1 border border-slate-300 p-1 rounded-lg bg-white shadow-sm">
+            <span class="text-xs text-slate-500 mr-1 font-medium hidden sm:inline">Вигляд:</span>
+            <button data-view="auto" class="view-mode-icon p-1 rounded transition" title="Автоматично (🌐)">🌐</button>
+            <button data-view="pc" class="view-mode-icon p-1 rounded transition" title="ПК Вигляд (💻)">💻</button>
+            <button data-view="mobile" class="view-mode-icon p-1 rounded transition" title="Мобільний Вигляд (📱)">📱</button>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 pb-24 space-y-12">
+        
+        <div id="page-content-wrapper">
+            
+            <div id="meteorite-info-page" class="page-content space-y-10 bg-white rounded-xl shadow-lg p-8">
+                </div>
+
+            <div id="impaktor-page" class="page-content space-y-12 hidden">
+                
+                <section id="history-section" class="bg-white rounded-2xl shadow-lg p-8 space-y-4">
+                    <h2 class="text-3xl font-bold text-slate-800 border-b pb-2 border-slate-200">Історія об'єкта: Астероїд "Імпактор-X"</h2>
+                    <div class="flex gap-6 flex-col-mobile">
+                        <div class="flex-1">
+                            <div class="overflow-hidden">
+                                <img src="images/658663c76dea77bbf97e414e4e21c0ea.jpeg" 
+                                    alt="Зображення астероїда, що наближається до Землі"
+                                    onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1200&q=60';"
+                                    class="object-cover w-full h-80 shadow-lg mb-4 image-slight-rounded" /> 
+                            </div>
+                        </div>
+                        <div class="flex-1 text-slate-700 leading-relaxed text-lg space-y-3">
+                            <h3 class="text-xl font-semibold text-sky-800">Відкриття та класифікація</h3>
+                            <p><strong>Астероїд "Імпактор-X"</strong> був відкритий у 2025 році за допомогою телескопа Pan-STARRS. Класифікований як навколоземний об'єкт (NEO) групи Аполлона. Його діаметр оцінюється приблизно в 3 кілометри.</p>
+                            
+                            <h3 class="text-xl font-semibold text-sky-800">Перші розрахунки</h3>
+                            <p>Початкові астрономічні розрахунки вказували на невелику, але ненульову ймовірність зіткнення із Землею у віддаленому майбутньому (2070 рік). Це викликало міжнародну програму спостережень і уточнення його орбіти.</p>
+                            
+                            <h3 class="text-xl font-semibold text-sky-800">Поточний статус</h3>
+                            <p>Завдяки додатковим даним від обсерваторій NASA та ESA, траєкторія була уточнена. Поточні прогнози розділилися на два основні сценарії, які аналізуються нижче.</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <nav class="flex gap-3 justify-center mb-6 nav-stack-mobile">
+                    <button id="flyby-btn"
+                        class="nav-button rounded-lg font-medium transition btn-active-flyby w-full-mobile">
+                        Проліт мимо
+                    </button>
+                    <button id="collision-btn"
+                        class="nav-button rounded-lg font-medium transition btn-inactive-collision border w-full-mobile">
+                        Зіткнення
+                    </button>
+                </nav>
+
+                <div id="content-container" class="space-y-10">
+                    </div>
+
+                <iframe 
+                    src="https://meteor-madness-two.vercel.app/" 
+                    width="100%" 
+                    height="500px" 
+                    frameborder="0" 
+                    style="border: 2px solid #075985; border-radius: 12px; margin-top: 1rem;"
+                    title="Сторінка Вікіпедії про метеорити"
+                    allowfullscreen
+                >
+                    Ваш браузер не підтримує вбудовані фрейми.
+                </iframe>
+
+                <div class="overflow-x-auto">
+                    <div class="bg-white rounded-xl shadow-lg">
+                        <h2 class="text-2xl font-bold text-center pt-8 mb-6 text-slate-800">Порівняння прогнозів</h2>
+                        <table class="min-w-full text-lg border-collapse">
+                            <thead>
+                                <tr class="bg-blue-50 text-sky-800 border-b-2 border-slate-200">
+                                    <th class="p-4 text-left rounded-tl-xl">Аспект</th>
+                                    <th class="p-4 text-blue-700 font-extrabold">Проліт мимо</th>
+                                    <th class="p-4 text-red-700 font-extrabold rounded-tr-xl">Зіткнення</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-slate-100">
+                                    <td class="p-4 font-medium border-r border-slate-100">Ймовірність</td>
+                                    <td class="p-4 border-r border-slate-100">Висока ймовірність прольоту без небезпеки.</td>
+                                    <td class="p-4">Надзвичайно низька, але з високими ризиками.</td>
+                                </tr>
+                                <tr class="bg-slate-50 border-b border-slate-100">
+                                    <td class="p-4 font-medium border-r border-slate-100">Наслідки</td>
+                                    <td class="p-4 border-r border-slate-100">Наукові дані, технологічні досягнення.</td>
+                                    <td class="p-4">Можливе глобальне знищення екосистем.</td>
+                                </tr>
+                                <tr class="border-b border-slate-100">
+                                    <td class="p-4 font-medium border-r border-slate-100">Дії людства</td>
+                                    <td class="p-4 border-r border-slate-100">Спостереження, дослідження, міжнародна співпраця.</td>
+                                    <td class="p-4">Розробка систем відхилення й космічної оборони.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            </div>
+    </main>
+
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <div id="modal-container" class="modal-container">
+            <button id="modal-close-btn" class="modal-close-btn">
+                &times;
+            </button>
+            <div id="modal-content" class="modal-content">
+                <div id="model-viewer" class="w-full h-full min-h-[500px] flex justify-center items-center">
+                    </div>
+            </div>
+        </div>
+    </div>
+    
+    <style>
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 200; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.8); 
+            padding-top: 50px;
+        }
+
+        .modal-content-static {
+            background-color: #fefefe;
+            margin: 5% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 90%; 
+            max-width: 800px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        /* Виправлення: Видалено inline-стилі iframe, щоб вони керувалися CSS */
+        .card-3d iframe {
+             border-radius: 8px;
+             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    
+    <script>
+        // --- DOM Elements ---
+        const impaktorPage = document.getElementById('impaktor-page');
+        const meteoritePage = document.getElementById('meteorite-info-page');
+        const headerTextContainer = document.getElementById('header-text-container');
+        const mainTabMeteorites = document.getElementById('main-tab-meteorites');
+        const mainTabImpaktor = document.getElementById('main-tab-impaktor');
+        const contentContainer = document.getElementById('content-container');
+        const flybyBtn = document.getElementById('flyby-btn');
+        const collisionBtn = document.getElementById('collision-btn');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalContent = document.getElementById('modal-content');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+        const modelViewer = document.getElementById('model-viewer'); 
+        const body = document.body;
+        const viewModeButtons = document.querySelectorAll('.view-mode-icon'); 
+        
+        // --- State Variables ---
+        let siteView = localStorage.getItem('siteView') || 'auto'; 
+        let currentView = '';
+        let currentImpaktorPage = 'flyby'; 
+        let currentMainPage = 'meteorites'; 
+        let currentRenderer = null; 
+        let currentAnimationId = null; 
+        
+        const defaultImage = 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=1200&q=60';
+
+        const fixedImages = {
+            flyby_calcs: 'images/unnamed (1).png', 
+            flyby_benefits: 'images/unnamed (2).png', 
+            flyby_future: 'images/freepik__-__31536.png', 
+            collision_risks: 'images/freepik__the-style-is-candid-image-photography-with-natural__31537.png', 
+            collision_prep: 'images/freepik__the-style-is-candid-image-photography-with-natural__31538.png',
+            collision_planning: 'images/unnamed.png'
+        };
+
+        const predictionData = {
+            flyby_calcs: {
+                title: "Астрономічні розрахунки",
+                subtitle: "Ймовірність прольоту",
+                image: fixedImages.flyby_calcs,
+                color: 'border-blue-500',
+                takes: [
+                    "1. Моделі NASA та ESA показують, що більшість відомих астероїдів мають траєкторії, які пролягають повз Землю. Ймовірність зіткнення в найближчі десятиліття **надзвичайно низька**.",
+                    "2. Прольоти на безпечних відстанях дають можливість **спостережень і збору даних** для розвитку планетарної науки та уточнення моделей.",
+                    "3. Постійний моніторинг орбіти дозволяє мінімізувати невизначеність щодо траєкторії об'єкта та забезпечує **багаторічне прогнозування з високою точністю**.",
+                    "4. Уточнення параметрів руху об'єкта **зменшує паніку** серед громадськості та дозволяє зосередитися на наукових дослідженнях, а не на кризовому плануванні.",
+                    "5. Завдяки прольоту буде підтверджена **ефективність глобальної мережі** раннього виявлення та відстеження навколоземних об'єктів (NEO)."
+                ]
+            },
+            flyby_benefits: {
+                title: "Наукові переваги",
+                subtitle: "Вивчення астероїдів",
+                image: fixedImages.flyby_benefits,
+                color: 'border-blue-500',
+                takes: [
+                    "1. Прольоти відкривають шанс для **досліджень складу астероїдів**, що допомагає зрозуміти походження Сонячної системи та ранні етапи формування планет.",
+                    "2. Такі події можуть стимулювати розвиток **космічних технологій** та міжнародне співробітництво в галузі астрономії та планетарної оборони.",
+                    "3. Крім досліджень, прольоти можуть бути використані для **гравітаційних маневрів** (\"гравітаційна праща\"), що дозволяє космічним місіям досягати віддалених цілей з меншими витратами палива.",
+                    "4. Зібрані дані про поверхню та структуру можуть мати **практичне значення** для майбутніх місій з видобутку ресурсів (космічний майнінг).",
+                    "5. Наближення астероїда дозволяє **відкалібрувати** земні та космічні телескопи, використовуючи його як рухомий об'єкт для перевірки точності обладнання."
+                ]
+            },
+            flyby_future: {
+                title: "Технологічне майбутнє",
+                subtitle: "Інновації, що виникають внаслідок прольотів",
+                image: fixedImages.flyby_future,
+                color: 'border-blue-500',
+                takes: [
+                    "1. Близькі прольоти стають каталізатором для розробки **нових поколінь сенсорів** і оптичних систем, здатних виявляти навіть дрібні об'єкти на великій відстані.",
+                    "2. Інженери використовують ці події для тестування **автономних навігаційних систем**, необхідних для майбутніх міжпланетних місій.",
+                    "3. Розвиток технологій **космічних телескопів**, які можуть стежити за об'єктами, що наближаються, з метою забезпечення максимальної точності даних.",
+                    "4. **Міжнародні протоколи** обміну даними між космічними агентствами (NASA, ESA, JAXA) стають стандартом, підвищуючи глобальну безпеку.",
+                    "5. Успішні прольоти стимулюють публічний інтерес до науки, залучаючи **нове покоління** астрономів та інженерів."
+                ]
+            },
+            collision_risks: {
+                title: "Можливі наслідки",
+                subtitle: "Глобальні ризики",
+                image: fixedImages.collision_risks,
+                color: 'border-red-600', 
+                takes: [
+                    "1. У випадку зіткнення з астероїдом діаметром понад 1 км можуть настати **кліматичні зміни**, цунамі та масове знищення екосистем.",
+                    "2. Подібні сценарії відомі з геологічної історії Землі (наприклад, падіння Чиксулубського астероїда, що спричинило **вимирання динозаврів**).",
+                    "3. У разі падіння, в атмосферу буде викинуто величезну кількість пилу та попелу, що призведе до **\"ударної зими\"** та глобального порушення сільськогосподарських циклів.",
+                    "4. Навіть падіння у Світовий океан викличе **мегацунамі** та глобальне забруднення прибережних зон, що вплине на мільярди людей.",
+                    "5. **Електромагнітний імпульс** від вибуху може вивести з ладу супутники та наземні системи зв’язку, спричинивши хаос у комунікаціях."
+                ]
+            },
+            collision_prep: {
+                title: "Підготовка людства",
+                subtitle: "Наукові й технологічні рішення",
+                image: fixedImages.collision_prep,
+                color: 'border-red-600',
+                takes: [
+                    "1. Сучасні програми, такі як NASA DART, демонструють можливості **відхилення траєкторії** астероїда за допомогою кінетичного удару. Розвиток таких технологій є ключем до захисту.",
+                    "2. Міжнародна координація та інвестиції у **космічну оборону** (Planetary Defense) є необхідними для запобігання катастрофі, оскільки це вимагає глобальних зусиль.",
+                    "3. Життєво важливим аспектом є розробка систем **раннього попередження** та планів захисту критичної інфраструктури, що дозволить евакуювати населення з найбільш імовірної зони ураження.",
+                    "4. Проводяться дослідження щодо використання **гравітаційного тягача** — метод повільної зміни орбіти за допомогою гравітації космічного апарата, що летить поруч.",
+                    "5. Необхідно створити **резервні системи** виробництва продовольства (підземні ферми, закриті екосистеми) для забезпечення виживання населення після первинного удару та наступних кліматичних змін."
+                ]
+            },
+            collision_planning: {
+                title: "Довгострокове планування",
+                subtitle: "Стратегії виживання та відновлення",
+                image: fixedImages.collision_planning,
+                color: 'border-red-600',
+                takes: [
+                    "1. Міжнародні організації розробляють **глобальні плани евакуації та перерозподілу** ресурсів у разі підтвердження неминучого зіткнення.",
+                    "2. Створюються **підземні сховища** (сімені, культурні артефакти, знання) для збереження людської цивілізації та біорізноманіття.",
+                    "3. Життєво важливим є забезпечення **енергетичної автономії** тих регіонів, які можуть пережити первинний удар, для прискорення відновлення.",
+                    "4. Плани включають розробку **стійких до клімату** культур і методів сільського господарства, щоб протистояти \"ударній зимі\"..",
+                    "5. Запровадження **глобальних фінансових фондів** для компенсації збитків та координації зусиль з відновлення після катастрофи."
+                ]
+            }
+        };
+
+        // --- HTML UTILITY FUNCTIONS ---
+
+        function responsiveImageHTML(src, alt) {
+            return `
+                <img
+                    src="${src}"
+                    alt="${alt}"
+                    onerror="this.onerror=null; this.src='${defaultImage}';"
+                    class="object-cover w-full h-48 image-slight-rounded transition-transform hover:scale-105"
+                />
+            `;
+        }
+
+        function takeCardHTML(text) {
+            // Заміна **текст** на <strong>текст</strong>
+            const boldText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            return `
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg shadow-sm text-lg text-slate-700">
+                    ${boldText}
+                </div>
+            `;
+        }
+
+        function predictionTriggerCardHTML(sectionId, title, subtitle, image, colorClass) {
+            return `
+                <div data-section-id="${sectionId}" 
+                     class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition duration-300 p-6 space-y-3 cursor-pointer border-t-8 ${colorClass} trigger-card">
+                    
+                    <div class="overflow-hidden mb-3">
+                        ${responsiveImageHTML(image, title)}
+                    </div>
+                    
+                    <h3 class="text-xl font-semibold text-slate-800">${title}</h3>
+                    ${subtitle ? `<p class="text-sm text-slate-500">${subtitle}</p>` : ''}
+                    <p class="text-sm text-blue-600 font-bold mt-2 hover:underline">Детальні тейки (5 шт.) →</p>
+                </div>
+            `;
+        }
+        
+        function getModalContentHTML(data) {
+            const takesHTML = data.takes.map(take => takeCardHTML(take)).join('');
+
+            return `
+                <div class="modal-content-inner-wrapper">
+                    <div class="space-y-6 pb-10"> 
+                        <h2 class="text-3xl font-bold text-slate-800 border-b pb-2 mb-4">${data.title}</h2>
+                        <p class="text-xl text-slate-600">${data.subtitle}</p>
+                        <div class="overflow-hidden mb-4">
+                            <img
+                                src="${data.image}"
+                                alt="${data.title}"
+                                onerror="this.onerror=null; this.src='${defaultImage}';"
+                                class="object-cover w-full h-80 shadow-lg image-slight-rounded"
+                            />
+                        </div>
+                        <div class="space-y-4">
+                            ${takesHTML}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // --- IMPAKTOR SUB-PAGES ---
+        const flybyPageHTML = `
+            <div class="space-y-10">
+                <h2 class="text-3xl font-bold text-blue-700">Прогноз: Проліт астероїда повз Землю</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                    ${predictionTriggerCardHTML('flyby_calcs', predictionData.flyby_calcs.title, predictionData.flyby_calcs.subtitle, predictionData.flyby_calcs.image, 'border-blue-500')}
+                    ${predictionTriggerCardHTML('flyby_benefits', predictionData.flyby_benefits.title, predictionData.flyby_benefits.subtitle, predictionData.flyby_benefits.image, 'border-blue-500')}
+                    ${predictionTriggerCardHTML('flyby_future', predictionData.flyby_future.title, predictionData.flyby_future.subtitle, predictionData.flyby_future.image, 'border-blue-500')}
+                </div>
+            </div>
+        `;
+
+        const collisionPageHTML = `
+            <div class="space-y-10">
+                <h2 class="text-3xl font-bold text-red-700">Прогноз: Потенційне зіткнення з астероїдом</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                    ${predictionTriggerCardHTML('collision_risks', predictionData.collision_risks.title, predictionData.collision_risks.subtitle, predictionData.collision_risks.image, 'border-red-600')}
+                    ${predictionTriggerCardHTML('collision_prep', predictionData.collision_prep.title, predictionData.collision_prep.subtitle, predictionData.collision_prep.image, 'border-red-600')}
+                    ${predictionTriggerCardHTML('collision_planning', predictionData.collision_planning.title, predictionData.collision_planning.subtitle, predictionData.collision_planning.image, 'border-red-600')}
+                </div>
+            </div>
+        `;
+
+        // --- METEORITE INFO CONTENT ---
+        const meteoriteInfoHTML = `
+            <h2 class="text-3xl font-bold text-slate-800 mb-6 border-b pb-2">Загальні відомості про метеорити</h2>
+
+            <section class="space-y-5 text-lg text-slate-700">
+                <h3 class="text-2xl font-semibold text-sky-800 border-b pb-1">Що таке метеорит?</h3>
+                <p><strong>Метеороїд</strong> — це космічне тіло (кам’яне, металеве або суміш матеріалів), яке рухається у міжпланетному просторі (наприклад, уламок астероїда або комети).</p>
+                <p><strong>Метеор</strong> — це світловий слід, що видно у небі, коли метеороїд входить в атмосферу Землі і починає згорати через тертя (розжарення).</p>
+                <p><strong>Метеорит</strong> — це той фрагмент метеороїда, який пережив шлях через атмосферу і впав на поверхню Землі (або іншої планети або супутника).</p>
+                <p class="font-medium mt-4">Таким чином, метеор — це процес (світлове явище), а метеорит — це об’єкт, який залишився.</p>
+            </section>
+            
+            <section class="space-y-5 text-lg text-slate-700">
+                <h3 class="text-2xl font-semibold text-sky-800 border-b pb-1">Вік, походження та хімічний склад</h3>
+
+                <h4 class="text-xl font-semibold text-blue-700">Вік</h4>
+                <ul class="list-disc list-inside space-y-2 ml-4">
+                    <li>Багато метеоритів, особливо ті, що походять з астероїдів, мають вік приблизно <strong>4,5 мільярда років</strong> — тобто вони сформувалися на самому початку Сонячної системи.</li>
+                    <li>Деякі включення всередині метеоритів (наприклад, кальцій-алюмінієві включення, CAI) були датовані близько <strong>4,56 мільярда років</strong> — це одні з найдавніших відомих тверді речовини у Сонячній системі.</li>
+                    <li>Якщо метеорит походить з Місяця або Марса, то його вік може бути меншим, відповідно до історії їхньої геології.</li>
+                </ul>
+                <h4 class="text-xl font-semibold text-blue-700 mt-5">Походження</h4>
+                <ul class="list-disc list-inside space-y-2 ml-4">
+                    <li>Більшість метеоритів походить від <strong>астероїдів</strong>, особливо з поясу астероїдів між Марсом і Юпітером.</li>
+                    <li>Деякі рідкісні метеорити походять з <strong>Місяця або Марса</strong>, коли ударні події викидають матеріал у космос, який пізніше падає на Землю.</li>
+                    <li>Тіло-джерело метеорита може бути «диференційованим» — тобто колись розплавленим (має ядро, мантію) — або «примітивним» — не зазнало значного переплавлення.</li>
+                </ul>
+                <h4 class="text-xl font-semibold text-blue-700 mt-5">Хімічний склад, мінерали та структура</h4>
+                <p>Метеорити класифікуються за їхнім хімічним та мінералогічним складом. Основні групи:</p>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-lg border-collapse table-auto border border-slate-300">
+                        <thead>
+                            <tr class="bg-blue-50 text-sky-800 border-b-2 border-slate-200">
+                                <th class="p-4 text-left border border-slate-300">Група / тип</th>
+                                <th class="p-4 text-left border border-slate-300">Характеристика</th>
+                                <th class="p-4 text-left border border-slate-300">Приклади / особливості</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-slate-100">
+                                <td class="p-4 font-medium border border-slate-300 align-top">Кам’яні (stony)</td>
+                                <td class="p-4 border border-slate-300 align-top">Склад: силікати (кремнеземи, олівін, пироксени), з домішками металу</td>
+                                <td class="p-4 border border-slate-300 align-top">~95 % метеоритів, що падають на Землю.</td>
+                            </tr>
+                            <tr class="bg-slate-50">
+                                <td class="p-4 font-medium border border-slate-300 align-top pl-8">— Хондритичні (chondrites)</td>
+                                <td class="p-4 border border-slate-300 align-top">Містять <strong>хондри</strong> — круглі мікроутворення, не плавилися повністю.</td>
+                                <td class="p-4 border border-slate-300 align-top">Наприклад, метеорит Allende — карбонат-хондрит CV3.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-medium border border-slate-300 align-top pl-8">— Ахондритичні (achondrites)</td>
+                                <td class="p-4 border border-slate-300 align-top">Більше подібні до вулканічних порід, були переплавлені на батьківському тілі.</td>
+                                <td class="p-4 border border-slate-300 align-top">Можуть походити з астероїдів, Місяця чи Марса.</td>
+                            </tr>
+                            <tr class="bg-slate-50">
+                                <td class="p-4 font-medium border border-slate-300 align-top">Залізні (iron)</td>
+                                <td class="p-4 border border-slate-300 align-top">Переважно <strong>залізо-нікель</strong>, іноді сульфіди та карбіди.</td>
+                                <td class="p-4 border border-slate-300 align-top">Мають характерну структуру <strong>Відманштеттена</strong> при травленні кислотами.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-medium border border-slate-300 align-top">Кам’яно-металічні (stony-iron)</td>
+                                <td class="p-4 border border-slate-300 align-top">Суміш металу й силікатів.</td>
+                                <td class="p-4 border border-slate-300 align-top">Наприклад, <strong>паллазити</strong> — метал + кристали олівіну.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="space-y-5 text-lg text-slate-700">
+                <h3 class="text-2xl font-semibold text-sky-800 border-b pb-1">Вивчення метеоритів (3D-моделі)</h3>
+                <p>Ось кілька прикладів метеоритів, які можна дослідити у 3D. Натисніть на картку, щоб відкрити модель та дізнатися більше:</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 pt-2">
+                    <div data-model-id="allende" class="card-3d">
+                        <div class="card-3d-inner">
+                            <h4 class="text-xl font-semibold mb-2">Allende (Мексика, 1969) </h4>
+                            <p class="text-sm text-slate-500"> Один з найвідоміших карбонат-хондритів. Після падіння зібрали понад 2 тонни уламків. Він має численні кальцій-алюмінієві включення (CAI), що досліджуються для розуміння раннього Сонячного диска. </p>
+                            <div id="allende-viewer" class="model-placeholder">
+                                <iframe src="https://sketchfab.com/models/d5f0b9a370ea407c8751e4874dd60ae4/embed" width="100%" height="200" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-model-id="gibeon" class="card-3d">
+                        <div class="card-3d-inner">
+                            <h4 class="text-xl font-semibold mb-2">Gibeon (Намібія)</h4>
+                            <p class="text-sm text-slate-500">Залізний метеорит групи IVA (тонкокристалічний октодрит). Мелодія Відманштеттена видно на зрізах при травленні. </p>
+                            <div id="gibeon-viewer" class="model-placeholder">
+                                <iframe src="https://sketchfab.com/models/5d50d90d582c4afab1bf715f9fcadf6c/embed" width="100%" height="200" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-model-id="capeyork" class="card-3d">
+                        <div class="card-3d-inner">
+                            <h4 class="text-xl font-semibold mb-2">Cape York (Гренландія)</h4>
+                            <p class="text-sm text-slate-500">Один із найбільших залізних метеоритів: загальна маса вилучених уламків — ~58 тонн. </p>
+                            <div id="capeyork-viewer" class="model-placeholder">
+                                <iframe src="https://sketchfab.com/models/6cdb0d058ac244a3baf2f7a10d835a51/embed" width="100%" height="200" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-model-id="kaba" class="card-3d">
+                        <div class="card-3d-inner">
+                            <h4 class="text-xl font-semibold mb-2">Kaba (Угорщина, 1857) </h4>
+                            <p class="text-sm text-slate-500">Кам’яний метеорит (CV3), у якому вперше виявили органічні речовини (вуглець ~2 %). </p>
+                            <div id="kaba-viewer" class="model-placeholder">
+                                <iframe src="https://sketchfab.com/models/249c97f25b9e4502b7c641792e4b7710/embed" width="100%" height="200" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-model-id="krasnojarsk" class="card-3d">
+                        <div class="card-3d-inner">
+                            <h4 class="text-xl font-semibold mb-2">Krasnojarsk (Палласит, знайдений 1749 року, росія / Сибір)</h4>
+                            <p class="text-sm text-slate-500">Був першою палласитною знахідкою. Палласити — особливий тип кам’яно-металічного метеорита, з металом, що оточує кристали олівіну. </p>
+                            <div id="krasnojarsk-viewer" class="model-placeholder">
+                                <iframe src="https://sketchfab.com/models/9139501aaf79496a86c8d9fa689b14da/embed" width="100%" height="200" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-model-id="gaoguenie" class="card-3d">
+                        <div class="card-3d-inner">
+                            <h4 class="text-xl font-semibold mb-2">Gao–Guenie (Буркіна-Фасо, 1960)</h4>
+                            <p class="text-sm text-slate-500">звичайний хондрит групи H5, що впав у вигляді метеоритного дощу на площі ~70 км², уламки розлетілись на значну відстань. </p>
+                            <div id="gaoguenie-viewer" class="model-placeholder">
+                                <iframe src="https://sketchfab.com/models/3079258abb304c169e65e650b5609515/embed" width="100%" height="200" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        `;
+
+
+        // --- MAIN APPLICATION LOGIC FUNCTIONS ---
+        
+        function updateHeaderText(page) {
+            headerTextContainer.innerHTML = '';
+            if (page === 'meteorites') {
+                headerTextContainer.innerHTML = `
+                    <h1 class="text-4xl font-extrabold text-slate-900">Каталог Метеоритів Землі</h1>
+                    <p class="text-lg text-slate-600 mt-1">Ознайомтесь з основними групами космічних каменів, які досягли нашої планети.</p>
+                `;
+            } else if (page === 'impaktor') {
+                headerTextContainer.innerHTML = `
+                    <h1 class="text-4xl font-extrabold text-slate-900">IMPAKTOR: Аналіз Ризиків</h1>
+                    <p class="text-lg text-slate-600 mt-1">Науковий прогноз траєкторії та потенційних наслідків зустрічі Землі з Астероїдом "Імпактор-X".</p>
+                `;
+            }
+        }
+        
+        function updateViewClasses() {
+            const isMobile = window.innerWidth < 768; 
+            
+            if (siteView === 'auto') {
+                currentView = isMobile ? 'mobile' : 'pc';
+            } else {
+                currentView = siteView;
+            }
+            
+            body.classList.remove('view-mobile', 'view-pc');
+            if (currentView === 'mobile') {
+                body.classList.add('view-mobile');
+            } else if (currentView === 'pc') {
+                body.classList.add('view-pc');
+            }
+
+            viewModeButtons.forEach(button => {
+                button.classList.remove('view-mode-active', 'view-mode-inactive');
+                const btnView = button.getAttribute('data-view');
+                const isActive = (siteView === 'auto' && btnView === 'auto') || 
+                                 (siteView !== 'auto' && siteView === btnView);
+                
+                if (isActive) {
+                    button.classList.add('view-mode-active');
+                } else {
+                    button.classList.add('view-mode-inactive');
+                }
+            });
+            
+        }
+
+        function setMainPage(page) {
+            currentMainPage = page;
+
+            mainTabMeteorites.classList.remove('main-tab-active', 'main-tab-inactive');
+            mainTabImpaktor.classList.remove('main-tab-active', 'main-tab-inactive');
+
+            if (page === 'meteorites') {
+                meteoritePage.classList.remove('hidden');
+                impaktorPage.classList.add('hidden');
+                mainTabMeteorites.classList.add('main-tab-active');
+                mainTabImpaktor.classList.add('main-tab-inactive');
+                updateHeaderText('meteorites');
+            } else if (page === 'impaktor') {
+                meteoritePage.classList.add('hidden');
+                impaktorPage.classList.remove('hidden');
+                mainTabMeteorites.classList.add('main-tab-inactive');
+                mainTabImpaktor.classList.add('main-tab-active');
+                updateHeaderText('impaktor');
+                setImpaktorSubPage(currentImpaktorPage);
+            }
+        }
+        
+        function setImpaktorSubPage(subpage) {
+            currentImpaktorPage = subpage;
+            
+            flybyBtn.classList.remove('btn-active-flyby', 'btn-inactive-collision', 'btn-inactive-flyby');
+            collisionBtn.classList.remove('btn-active-collision', 'btn-inactive-flyby', 'btn-inactive-collision');
+
+            if (subpage === 'flyby') {
+                contentContainer.innerHTML = flybyPageHTML;
+                flybyBtn.classList.add('btn-active-flyby');
+                collisionBtn.classList.add('btn-inactive-collision');
+            } else if (subpage === 'collision') {
+                contentContainer.innerHTML = collisionPageHTML;
+                flybyBtn.classList.add('btn-inactive-flyby');
+                collisionBtn.classList.add('btn-active-collision');
+            }
+            
+            // Re-attach listeners for dynamically loaded cards
+            document.querySelectorAll('.trigger-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    const sectionId = e.currentTarget.getAttribute('data-section-id');
+                    const data = predictionData[sectionId];
+                    showModal(data);
+                });
+            });
+        }
+        
+        // --- MODAL LOGIC ---
+
+        function clear3d() {
+            if (currentRenderer) {
+                currentRenderer.dispose();
+                while (modelViewer.firstChild) {
+                    modelViewer.removeChild(modelViewer.firstChild);
+                }
+                currentRenderer = null;
+            }
+            if (currentAnimationId) {
+                cancelAnimationFrame(currentAnimationId);
+                currentAnimationId = null;
+            }
+        }
+        
+        function showModal(data) {
+            clear3d(); 
+            
+            // Встановлюємо вміст модального вікна
+            modalContent.innerHTML = getModalContentHTML(data); 
+
+            // Показуємо модальне вікно та блокуємо скрол
+            modalOverlay.classList.remove('hidden');
+            body.classList.add('overflow-hidden');
+            
+            // Додаємо обробник для закриття по кліку поза вікном
+            modalOverlay.addEventListener('click', handleOverlayClick);
+        }
+
+        function hideModal() {
+            // КЛЮЧОВЕ: Додаємо клас 'hidden'
+            modalOverlay.classList.add('hidden');
+            body.classList.remove('overflow-hidden');
+            clear3d(); 
+            
+            // Очищаємо вміст модального вікна, щоб запобігти Flash of Content
+            modalContent.innerHTML = `<div id="model-viewer" class="w-full h-full min-h-[500px] flex justify-center items-center"></div>`;
+
+            modalOverlay.removeEventListener('click', handleOverlayClick);
+        }
+        
+        function handleOverlayClick(event) {
+            // Перевіряємо, чи клік був саме на overlay, а не на modal-container
+            if (event.target.id === 'modal-overlay') {
+                hideModal();
+            }
+        }
+        
+        // --- INITIALIZATION AND EVENT LISTENERS ---
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Fill the static meteorite info page content
+            meteoritePage.innerHTML = meteoriteInfoHTML; 
+
+            // 2. Set initial view and main page
+            updateViewClasses(); 
+            setMainPage('meteorites'); 
+            
+            // 3. Attach all event listeners
+            mainTabMeteorites.addEventListener('click', () => setMainPage('meteorites'));
+            mainTabImpaktor.addEventListener('click', () => setMainPage('impaktor'));
+            
+            if(flybyBtn) flybyBtn.addEventListener('click', () => setImpaktorSubPage('flyby'));
+            if(collisionBtn) collisionBtn.addEventListener('click', () => setImpaktorSubPage('collision'));
+            
+            // КЛЮЧОВЕ: Кнопка закриття модального вікна
+            modalCloseBtn.addEventListener('click', hideModal);
+
+            viewModeButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const newSiteView = e.currentTarget.getAttribute('data-view');
+                    siteView = newSiteView;
+                    localStorage.setItem('siteView', siteView);
+                    updateViewClasses();
+                });
+            });
+
+            window.addEventListener('resize', updateViewClasses);
+            
+            // ВАЖЛИВО: Тут немає жодного випадкового виклику showModal()!
+        });
+        
+    </script>
+</body>
+</html>
